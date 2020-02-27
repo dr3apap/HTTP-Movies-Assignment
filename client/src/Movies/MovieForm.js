@@ -1,98 +1,107 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const initialMovie = {
   title: "",
   director: "",
-  metascore: "",
-  id: "",
+  metascore: 0,
   stars: [],
 };
 
-class MovieForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      state: initialMovie,
-    };
-  }
-  handleChange = e => {
-    this.setState({
+const MovieForm = props => {
+  const [movie, setMovie] = useState({ initialMovie });
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const movieToUpdate = props.movieList.find(movie => `${movie.id}` === id);
+
+    if (movieToUpdate) {
+      console.log("movieToUpdate", movieToUpdate);
+      setMovie({ ...movieToUpdate, stars: movieToUpdate.stars.join(", ") });
+    }
+  }, [props.movieList, id]);
+
+  const handleChange = e => {
+    let value = e.target.value;
+
+    setMovie({
       ...this.initialMovie,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const url = "http://localhost:5000/api/movies/:${id}";
+
+    movie.stars = movie.stars.split(", ");
+
     axios
-      .put(url, `${this.state}`)
-
-      .then(res => console.log("the data requested", res))
-
-      .catch(err => console.log(err.res.data));
+      .put(`http://localhost:5000/api/movies/${id}`, movie)
+      .then(res => {
+        props.refreshMovies();
+        props.history.push("/");
+      })
+      .catch(err => console.log(err));
   };
 
-  render() {
-    return (
-      <form>
-        <div>
-          <label htmlFor='movie'>
-            <input
-              onChange={this.handleChange}
-              id='movie'
-              type='text'
-              name='title'
-              placeholder='Title'
-              value={this.state.title}
-            />
-          </label>
-          <label htmlFor='movie'>
-            <input
-              onChange={this.handleChange}
-              id='movie'
-              type='text'
-              name='director'
-              placeholder='Director'
-              value={this.state.director}
-            />
-          </label>
-          <label htmlFor='movie'>
-            <input
-              onChange={this.handleChange}
-              id='movie'
-              type='text'
-              name='metascore'
-              placeholder='Metascore'
-              value={this.state.metascore}
-            />
-          </label>
-          <label htmlFor='movie'>
-            <input
-              onChange={this.handleChange}
-              id='movie'
-              type='text'
-              name='stars'
-              placeholder='Stars'
-              value={this.state.stars}
-            />
-          </label>
-          <label htmlFor='movie'>
-            <input
-              onChange={this.handleChange}
-              id='movie'
-              type='text'
-              name='id'
-              placeholder='Movie-id'
-              value={this.state.id}
-            />
-          </label>
-          <button type='submit'>Submit&rarr;</button>
-        </div>
-      </form>
-    );
-  }
-}
+  return (
+    <form onClick={handleSubmit}>
+      <div>
+        <label htmlFor='movie'>
+          <input
+            onChange={handleChange}
+            id='movie'
+            type='text'
+            name='title'
+            placeholder='Title'
+            value={movie.title}
+          />
+        </label>
+        <label htmlFor='movie'>
+          <input
+            onChange={handleChange}
+            id='movie'
+            type='text'
+            name='director'
+            placeholder='Director'
+            value={movie.director}
+          />
+        </label>
+        <label htmlFor='movie'>
+          <input
+            onChange={handleChange}
+            id='movie'
+            type='text'
+            name='metascore'
+            placeholder='Metascore'
+            value={movie.metascore}
+          />
+        </label>
+        <label htmlFor='movie'>
+          <input
+            onChange={handleChange}
+            id='movie'
+            type='text'
+            name='stars'
+            placeholder='Stars'
+            value={movie.stars}
+          />
+        </label>
+        <label htmlFor='movie'>
+          <input
+            onChange={handleChange}
+            id='movie'
+            type='text'
+            name='id'
+            placeholder='Movie-id'
+            value={movie.id}
+          />
+        </label>
+        <button type='submit'>Submit&rarr;</button>
+      </div>
+    </form>
+  );
+};
 export default MovieForm;

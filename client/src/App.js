@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
+import MovieCard from "./Movies/MovieCard";
 import SavedList from "./Movies/SavedList";
 import MovieForm from "./Movies/MovieForm";
 import MovieList from "./Movies/MovieList";
@@ -24,6 +25,7 @@ const App = () => {
   useEffect(() => {
     getMovieList();
   }, []);
+  console.log("movieList", movieList);
 
   return (
     <>
@@ -33,12 +35,30 @@ const App = () => {
         <MovieList movies={movieList} />
       </Route>
 
-      <Route path='/movies/:id'>
-        <Movie addToSavedList={addToSavedList} />
-      </Route>
-      <Route path='/update-movie/:id'>
-        <MovieForm component={MovieForm} />
-      </Route>
+      <Route
+        path='/movies/:id'
+        render={props => (
+          <Movie
+            {...props}
+            addToSavedList={addToSavedList}
+            movieList={movieList}
+            setMovieList={setMovieList}
+            refreshMovies={getMovieList}
+          />
+        )}
+      />
+
+      <Route
+        path='/update-movie/:id'
+        render={props => (
+          <MovieForm
+            {...props}
+            movieList={movieList}
+            setMovieList={setMovieList}
+            refreshMovies={getMovieList}
+          />
+        )}
+      />
     </>
   );
 };
