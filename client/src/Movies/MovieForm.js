@@ -27,7 +27,7 @@ const MovieForm = props => {
     let value = e.target.value;
 
     setMovie({
-      ...initialMovie,
+      ...movie,
       [e.target.name]: value,
     });
   };
@@ -73,7 +73,7 @@ const MovieForm = props => {
           <input
             onChange={handleChange}
             id='movie'
-            type='text'
+            type='number'
             name='metascore'
             placeholder='Metascore'
             value={movie.metascore}

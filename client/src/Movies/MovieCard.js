@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 
 const MovieCard = props => {
-  const value = useContext(MovieContext);
   const { title, director, metascore, stars } = props.movie;
   return (
     <div className='movie-card'>
