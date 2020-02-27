@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
 
-import { MovieContext } from "./Context/MovieContext";
-
 const MovieCard = props => {
   const value = useContext(MovieContext);
   const { title, director, metascore, stars } = props.movie;

@@ -27,7 +27,7 @@ const MovieForm = props => {
     let value = e.target.value;
 
     setMovie({
-      ...this.initialMovie,
+      ...initialMovie,
       [e.target.name]: value,
     });
   };

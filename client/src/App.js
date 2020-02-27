@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
-import MovieCard from "./Movies/MovieCard";
 import SavedList from "./Movies/SavedList";
 import MovieForm from "./Movies/MovieForm";
 import MovieList from "./Movies/MovieList";
